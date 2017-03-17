@@ -27,13 +27,32 @@ Q3. Considere o código abaixo, de 12 linhas:
 
 Para este código, responda:
 	(a) A variável 'i' é armazenada na memória RAM ou ROM? Por quê?
-		Armazenada na memória RAM, pois "i" é uma vari
+		Armazenada na memória RAM, pois "i" é uma variável que vai ser atualizada a cada execução do código, portanto é uma
+		informação volátil.
 	(b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
-
+		Armazenado na memória ROM, pois após a compilação do código um arquivo é salvo e que pode ser reaproveitado, portando um
+		dado não volátil.
+		
 Q4. Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
 
+	A arquitetura Von Neumann permite o processamento de uma única informação por vez, 
+	visto que, a execução e os dados percorrem o mesmo barramento, tornando a arquitetura mais simples porém o processamento
+	se torna mais lento quando comparado com a arquitetura Harvard que possui duas memórias diferentes e independentes em termos
+	de barramento e ligação ao processador, sendo possível acessar as duas memórias simultaneamente, obtendo assim uma velocidade
+	maior de processamento de informação, porém com uma estrutura de hardware mais complexa.
+	
 Q5. Considere a variável inteira 'i', armazenando o valor 0x8051ABCD. Se 'i' é armazenada na memória a partir do endereço 0x0200, como ficam este byte e os seguintes, considerando que a memória é:
 	(a) Little-endian?
+		0xCD armazenado no endereço 0x0200
+		0xAB armazenado no endereço 0x0201
+		0x51 armazenado no endereço 0x0202
+		0x80 armazenado no endereço 0x0203
 	(b) Big-endian?
-
+		0x80 armazenado no endereço 0x0200
+		0x51 armazenado no endereço 0x0201
+		0xAB armazenado no endereço 0x0202
+		0xCD armazenado no endereço 0x0203
+		
 Q6. Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
+	Primeiro o registrador R0 armazena os 16 bits menos significativos da primeira variavel e soma com os 16 bits menos significativos
+	da segunda variável armazenados no registrador R1 e armazena o resultado.
