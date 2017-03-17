@@ -1,9 +1,15 @@
 Data: 15/03/2017
 
 Q1. Quais as diferenças entre os barramentos de dados e de endereços?
+	O barramento de dados é bidirecional e troca informações entre os diversos componentes de um sistema microprocessado, já o 
+	barramento de endereço é unidirecional e permite a seleção de uma posição de memoria ou dispositivo de entrada e saída por
+	parte do processador.
 
 Q2. Quais são as diferenças entre as memórias RAM e ROM?
-
+	A memória RAM é um tipo de memória de acesso aleatório que permite a leitura e escrita de dados temporários, visto que os dados são
+	perdidos quando acaba a energia do sistema, já a memoria ROM permite somente a leitura de dados e as informação gravadas na ROM não
+	são perdidas após acabar a energia do sistema. Também é de acesso aleatório.
+	
 Q3. Considere o código abaixo, de 12 linhas:
 
     1.   #include <stdio.h>
@@ -21,6 +27,7 @@ Q3. Considere o código abaixo, de 12 linhas:
 
 Para este código, responda:
 	(a) A variável 'i' é armazenada na memória RAM ou ROM? Por quê?
+		Armazenada na memória RAM, pois "i" é uma vari
 	(b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
 
 Q4. Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
