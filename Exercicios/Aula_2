@@ -30,7 +30,7 @@ Para este código, responda:
 		Armazenada na memória RAM, pois "i" é uma variável que vai ser atualizada a cada execução do código, portanto é uma
 		informação volátil.
 	(b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
-		Armazenado na memória ROM, pois após a compilação do código um arquivo é salvo e que pode ser reaproveitado, portando um
+		Armazenado na memória ROM, pois após a compilação do código um arquivo é salvo e que pode ser reaproveitadoc e editado, portando um
 		dado não volátil.
 		
 Q4. Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
@@ -55,4 +55,4 @@ Q5. Considere a variável inteira 'i', armazenando o valor 0x8051ABCD. Se 'i' é
 		
 Q6. Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
 	Primeiro o registrador R0 armazena os 16 bits menos significativos da primeira variavel e soma com os 16 bits menos significativos
-	da segunda variável armazenados no registrador R1 e armazena o resultado.
+	da segunda variável armazenados no registrador R1 e armazena o resultado, repete-se esse processo para 16 bits mais significativos.
