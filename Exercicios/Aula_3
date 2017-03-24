@@ -27,7 +27,7 @@ Data: 22/03/2017
 		P1OUT ^= 0x41;
 		i = 10000;				
 		do i--;
-		while(i != 0);
+		while(i != 0);  //for (i = 0; i < 0x6000; i++); OUTRA FORMA 
 		}
 	}
 
@@ -43,9 +43,15 @@ Data: 22/03/2017
 		P1DIR = LED1 + LED2;
 		for(;;)
 		{
+		volatile unsigned int i;
 			if(P1IN & BTN == 0)
 				P1OUT |= LED1 + LED2;
-				
+				__delay_cycles(4000000);
+				P1OUT ^= 0x41;
+				__delay_cycles(4000000);
+				P1OUT ^= 0x41;
+				__delay_cycles(4000000);
+				P1OUT ^= 0x41;
 			else
 				P1OUT &= ~(LED1 + LED2);
 		}
