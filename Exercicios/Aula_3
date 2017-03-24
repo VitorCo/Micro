@@ -32,30 +32,34 @@ Data: 22/03/2017
 	}
 
 3. Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o botão.
-		#include <msp430g2553.h>
-		#define BTN BIT3
-		#define LED1 BIT0
-		#define LED2 BIT6
-	void main(void)
-	{
-		WDTCTL = WDTPW|WDTHOLD;
-		P1OUT = 0;
-		P1DIR = LED1 + LED2;
-		for(;;)
-		{
-		volatile unsigned int i;
-			if(P1IN & BTN == 0)
-				P1OUT |= LED1 + LED2;
-				__delay_cycles(4000000);
-				P1OUT ^= 0x41;
-				__delay_cycles(4000000);
-				P1OUT ^= 0x41;
-				__delay_cycles(4000000);
-				P1OUT ^= 0x41;
-			else
-				P1OUT &= ~(LED1 + LED2);
-		}
-	}
+
+#include <msp430g2553.h>
+        #define BTN BIT3
+        #define LED1 BIT0
+        #define LED2 BIT6
+    void main(void)
+    {
+        WDTCTL = WDTPW|WDTHOLD;
+        P1OUT = 0;
+        P1DIR = LED1 + LED2;
+        for(;;)
+        {
+            while((P1IN & BTN) != 0)
+            {
+                P1OUT |= LED1 + LED2;
+                __delay_cycles(500000);
+                P1OUT ^= 0x41;
+                __delay_cycles(500000);
+                P1OUT ^= 0x41;
+                __delay_cycles(500000);
+                P1OUT ^= 0x41;
+            }
+            while((P1IN & BTN) == 0){
+                P1OUT &= ~(LED1 + LED2);
+            }
+        }
+    }
+    
 4. Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
 
 5. Reescreva o código da questão 2 usando a função da questão 4.
