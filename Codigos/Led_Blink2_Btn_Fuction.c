@@ -7,13 +7,15 @@
         WDTCTL = WDTPW|WDTHOLD;
         P1OUT = 0;
         P1DIR = LED1 + LED2;
+        P1REN = BTN; //habilita resistor interno
+        P1OUT = BTN; //resistor interno de pull-up
         for(;;)
         {
-            while((P1IN & BTN) != 0)
+            while((P1IN & BTN) == 0)
             {
                 PiscaLed();
             }
-            while((P1IN & BTN) == 0){
+            while((P1IN & BTN) != 0){
                 P1OUT &= ~(LED1 + LED2);
             }
         }
