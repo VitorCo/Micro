@@ -7,11 +7,11 @@
         WDTCTL = WDTPW|WDTHOLD;
         P1OUT = 0;
         P1DIR = LED1 + LED2;
-        P1REN = BTN; //habilita resistor interno 
+        P1REN = BTN; //habilita resistor interno
         P1OUT = BTN; //resistor interno de pull-up
         for(;;)
         {
-            while((P1IN & BTN) != 0)
+            while((P1IN & BTN) == 0)
             {
                 P1OUT |= LED1 + LED2;
                 __delay_cycles(500000);
@@ -21,7 +21,7 @@
                 __delay_cycles(500000);
                 P1OUT ^= LED1 + LED2;
             }
-            while((P1IN & BTN) == 0){
+            while((P1IN & BTN) != 0){
                 P1OUT &= ~(LED1 + LED2);
             }
         }
