@@ -30,12 +30,16 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
   
     cmp R8,R7;
     jl OP_SUB
-    
+     mov R5,R4;
+     sub.w R6,R4;
+     sub.w #10,R4;
+    jmp EXIT 
     OP_SUB:
-      mov #10,R4;
-      add.w R6,R4;
-      add.w R5,R4;
-      
+      mov R5,R4;
+      sub.w R6,R4;
+      sub.w #10,R4;
+     EXIT:
+     
 3. "Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 
 	while(save[i]!=k) i++;
