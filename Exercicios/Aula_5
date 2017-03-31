@@ -32,8 +32,8 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
     cmp R8,R7;
     jl OP_SUB
      mov R5,R4;
-     sub.w R6,R4;
-     sub.w #10,R4;
+     add.w R6,R4;
+     add.w #10,R4;
     jmp EXIT 
     OP_SUB:
       mov R5,R4;
@@ -63,7 +63,7 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
 		mov.w R7,R12;		/R7=i, R12 = temporario: R12 = i;
 		rla R12;		/R12 = i*2;
 		move.w R12,R13;		/R13 = i*2;
-		add.w R9,R12;		/R9 = A, R12 = A + 2*i = A[i];
+		add.w R9,R12;		/R9 = A, R12 = A + 2*i = &A[i];
 		cmp #100,R7;		
 		jge EXIT;
 		move.w R13,0(R12);		/R12 = 2*i ou A[i] = 2*i;
