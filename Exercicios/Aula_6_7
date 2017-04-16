@@ -12,18 +12,68 @@ após 'n+1' iterações, a raiz quadrada de 'S' é dada por
 O protótipo da função é:
 
 	unsigned int Raiz_Quadrada(unsigned int S);
+	
+	float Raiz_Quadrada(float S){
+	int n = 0;
+	float x = S/2;
+
+	while(n<10){
+	x = (x + S/x)/2;
+	n++;
+	}
+	return x;
+	}
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável 'S' é fornecida pelo registrador R15, e a raiz quadrada de 'S' (ou seja, a variável 'x') é fornecida pelo registrador R15 também.
 
 2. (a) Escreva uma função em C que calcule 'x' elevado à 'N'-ésima potência, seguindo o seguinte protótipo: 
 
-	int Potencia(int x, int N);
+	int Potencia(int x, int N){
+	int i=1;
+	int result;
 
-(b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. 'x' e 'n' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida no registrador R15.
+	if(N==0)
+	return 1;
+	else{
+		while(i<N){
+		result = mult(x,x);
+		i++;
+		}
+	 }
+	 return result;
+	}
 
-3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de 'a' por 'b', onde 'a', 'b' e o valor de saída são inteiros de 16 bits. 'a' e 'b' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
+int mult(int a, int b){
+    int mult=0;
+    if(b==0)
+    return 0;
+    else{
+        while(b>0){
+        mult = mult + a;
+        b--;
+        }
+    }
+return mult;
+}
 
-4. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o resto da divisão de 'a' por 'b', onde 'a', 'b' e o valor de saída são inteiros de 16 bits. 'a' e 'b' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
+(b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. 'x' e 'n' são fornecidos através dos registradores R15 e R14, 
+respectivamente, e a saída deverá ser fornecida no registrador R15.
+
+3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de 'a' por 'b', onde 'a', 'b' e o valor de saída são 
+inteiros de 16 bits. 'a' e 'b' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida 
+através do registrador R15.
+
+Div_Loop:      CMP R14,R15
+                JL END_Div
+ 		SUB R14,R15
+ 		INC R13
+ 		JMP Div_Loop              
+ END_Div:       MOV R13,R15
+                RET   
+
+4. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o resto da divisão de 'a' por 'b', onde 'a', 'b' e o valor de saída
+são inteiros de 16 bits. 'a' e 'b' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida 
+através do registrador R15.
 
 5. (a) Escreva uma função em C que indica a primalidade de uma variável inteira sem sinal, retornando o valor 1 se o número for primo, e 0, caso contrário. Siga o seguinte protótipo:
 
