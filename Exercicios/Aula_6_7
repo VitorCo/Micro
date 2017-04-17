@@ -59,6 +59,29 @@ return mult;
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. 'x' e 'n' são fornecidos através dos registradores R15 e R14, 
 respectivamente, e a saída deverá ser fornecida no registrador R15.
 
+Potencia:     MOV R14,R11               ;Contador i = R14
+              MOV R15,R14
+              CMP #0,R11
+              JEQ End_Pot_1
+Loop:         CMP #1,R11
+              JEQ End_Pot_2
+              CALL #Mult_Routine
+              DEC R11
+              JMP Loop
+End_Pot_1:    MOV #1,R15
+              RET              
+End_Pot_2:    RET 
+ 
+Mult_Routine: CLR.W R13
+              MOV.W R14,R12
+Mult_loop:    CMP #0,R12
+              JEQ End_Mult
+              ADD.W R15,R13
+              DEC.W R12
+              JMP Mult_loop
+End_Mult:     MOV.W R13,R15
+              RET
+
 3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de 'a' por 'b', onde 'a', 'b' e o valor de saída são 
 inteiros de 16 bits. 'a' e 'b' são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida 
 através do registrador R15.
