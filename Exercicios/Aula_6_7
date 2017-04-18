@@ -24,7 +24,32 @@ O protótipo da função é:
 	return x;
 	}
 
-(b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável 'S' é fornecida pelo registrador R15, e a raiz quadrada de 'S' (ou seja, a variável 'x') é fornecida pelo registrador R15 também.
+(b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável 'S' é fornecida pelo registrador R15, e a raiz quadrada
+de 'S' (ou seja, a variável 'x') é fornecida pelo registrador R15 também.
+	
+Raiz:     MOV R15,R14
+          RRA R14
+          CLR R11                        ; contador
+Loop_Raiz:CMP #11,R11
+          JGE End_Loop
+          PUSH R15
+          CALL #Div_Loop
+          ADD R15,R14
+          RRA R14
+          INC R11
+          POP R15
+          JMP Loop_Raiz
+End_Loop: MOV R14,R15
+          RET
+
+Div_Loop:       CLR R13
+Loop_Div        CMP R14,R15
+                JL END_Div
+ 		SUB R14,R15
+ 		INC R13
+ 		JMP Loop_Div             
+END_Div:        MOV R13,R15
+                RET
 
 2. (a) Escreva uma função em C que calcule 'x' elevado à 'N'-ésima potência, seguindo o seguinte protótipo: 
 
