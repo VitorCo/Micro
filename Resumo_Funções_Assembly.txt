@@ -1,4 +1,4 @@
-Funções Matemáticas Sem Sinal
+FunÃ§Ãµes MatemÃ¡ticas Sem Sinal
 -------------------------------------------------------------------------------
 Potencia:     MOV R14,R11               ;Contador i = R14
               MOV R15,R14
@@ -22,6 +22,15 @@ Mult_loop:    CMP #0,R12
               JMP Mult_loop
 End_Mult:     MOV.W R13,R15
               RET
+
+Mult_Signed:  		TST.W R14
+	      		JGE Mult_Signed_Else
+	      		INV.W R15
+	      		INC.W R15
+	      		INV.W R14
+	      		INC.W R14
+Mult_Signed_Else	CALL #Mult_Routine
+			RET
 ------------------------------------------------------------------------------
 Raiz:     MOV R15,R14
           RRA R14
