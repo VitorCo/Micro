@@ -53,22 +53,24 @@ END_Div:        MOV R13,R15
 
 2. (a) Escreva uma função em C que calcule 'x' elevado à 'N'-ésima potência, seguindo o seguinte protótipo: 
 
-	int Potencia(int x, int N){
+int Potencia(int x, int N){
 	int i=1;
-	int result;
+	int result = x;
 
 	if(N==0)
 	return 1;
+	else if(N==1)
+    return x;
 	else{
 		while(i<N){
-		result = mult(x,x);
+		result = Mult(result,x);
 		i++;
 		}
 	 }
 	 return result;
 	}
 
-int mult(int a, int b){
+int Mult(int a, int b){
     int mult=0;
     if(b==0)
     return 0;
@@ -241,11 +243,33 @@ de 16 bits. A variável de entrada é fornecida pelo registrador R15, e o valor 
 8. Escreva uma sub-rotina na linguagem Assembly do MSP430 que indica se um vetor esta ordenado de forma decrescente. Por exemplo:
 [5 4 3 2 1] e [90 23 20 10] estão ordenados de forma decrescente.
 [1 2 3 4 5] e [1 2 3 2] não estão.
-O primeiro endereço do vetor é fornecido pelo registrador R15, e o tamanho do vetor é fornecido pelo registrador R14. A saída deverá ser fornecida no registrador R15, valendo 1 quando o vetor estiver ordenado de forma decrescente, e valendo 0 em caso contrário.
+O primeiro endereço do vetor é fornecido pelo registrador R15, e o tamanho do vetor é fornecido pelo registrador R14. A saída deverá 
+ser fornecida no registrador R15, valendo 1 quando o vetor estiver ordenado de forma decrescente, e valendo 0 em caso contrário.
 
+Avalia_Ordem_Dec:       CLR.W R13          ;R13=i=0
+Loop_Ordem:             MOV.W R13,R12
+                        ADD.W #2,R12       ;R12=i+2=temporario
+                        CMP R14,R13             
+                        JGE Fim_Varredura
+                        PUSH R13
+                        ADD.W R15,R13
+                        ADD.W R15,R12
+                        CMP 0(R12),0(R13) ;vetor[i] < vetor[i+1]?
+                        JL Desordem
+                        POP R13
+                        ADD #2,R13
+                        JMP Loop_Ordem                        
+Fim_Varredura:          MOV.W #1,R15             
+                        RET
+Desordem:               CLR.W R15
+                        POP R13
+                        RET
+			
 9. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o produto escalar de dois vetores, 'a' e 'b':
 	
-O primeiro endereço do vetor 'a' deverá ser passado através do registrador R15, o primeiro endereço do vetor 'b' deverá ser passado através do registrador R14, e o tamanho do vetor deverá ser passado pelo registrador R13. A saída deverá ser fornecida no registrador R15.
+O primeiro endereço do vetor 'a' deverá ser passado através do registrador R15, o primeiro endereço do vetor 'b' deverá ser passado
+através do registrador R14, e o tamanho do vetor deverá ser passado pelo registrador R13. A saída deverá ser fornecida no registrador 
+R15.
 
 10. (a) Escreva uma função em C que indica se um vetor é palíndromo. Por exemplo:
 	[1 2 3 2 1] e [0 10 20 20 10 0] são palíndromos.
