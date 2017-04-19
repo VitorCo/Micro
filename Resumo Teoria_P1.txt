@@ -1,0 +1,66 @@
+Resumo Teoria:
+--------------------------------
+
+Memoria(RAM e ROM)
+->RAM: volátil, perde o conteúdo quando acaba a energia
+-Estática = Mantém os dados mesmo quando o clock for parado: 6 transistores
+-Dinâmica = Precisa ser atualizada regurlamente: 1 transistor
+
+->ROM: Não volátil, mantém os dados quando acaba a energia. Escrita bem mais
+lenta do que a memoria RAM
+-Masked ROM = Dados escritos durante manufatura do CI;
+-EPROM = Programável eletricamente, apagada com luz ultravioleta;
+-OTP = EPROM sem a "janela" para luz ultravioleta;
+FLASH = Leitura e escrita eletricamente como a EEPROM, pode ser apagada em blocos
+e a EEPROM byte a byte;
+
+Arquitetura Para Memórias:
+-> Harvard = A arquitetura Harvard que possui duas memórias diferentes e independentes em termos
+	de barramento e ligação ao processador, sendo possível acessar as duas memórias simultaneamente, obtendo assim uma velocidade
+	maior de processamento de informação.
+
+-> Neumann = A arquitetura Von Neumann permite o processamento de uma única informação por vez, 
+	visto que, a execução e os dados percorrem o mesmo barramento, tornando a arquitetura mais simples porém o processamento
+	se torna mais lento
+
+MSP430:
+Processador de 16 bits;
+Clock de 16Mhz;
+Arquitetura Von Neumann;
+Aplicação de baixo consumo de energia;
+Barramento de dados e de memória de 16 bits;
+Registradores de 16 bits;
+2^16 = 64KB de memória;
+Transfere bytes ou palavras de 2 bytes;
+Little-Endian = 0x1234 -- 0x34 em 0x0200 e 0x12 em 0x0201/ No MSP o byte menos
+significativo fica na memória mais baixa;
+R4-R15 = Registradores de uso geral;
+Registradores estão na CPU;
+
+P1DIR: Define se o pino é de entrada ou de saída (0 = entrada e 1 = saída)
+
+Instruções:
+bis.w Rx,Ry ;OR entre os registradores e guarda em Ry = Força os bits a serem setados;
+and.w Rx,Ry ;AND entre os registradores e guarda em Ry = Forã os bits a serem zerados;
+bic.w Rx,Ry ;AND com o inverso de Rx e guarda em Ry;
+xor.w Rx,Ry ;XOR entre Rx e Ry e guarda em Ry = Inverte os bits de Ry;
+inv.w Rx    ;NOT em todos os bits de Rx
+cmp Rx,Ry
+jeq
+jne
+jmp
+
+while(save[i] == k) i++;
+mov R7,R12
+rla R12
+add.w R10,R12
+cmp 0(R12),R9
+jne EXIT
+inc.w R7
+jmp LOOP
+EXIT:
+
+Registradores R15 até R12 passar parametros para sub-rotina
+R15 retorna valores
+
+
