@@ -1,0 +1,63 @@
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+
+        MOV.W   #0x0a10,R15
+        MOV.W   #0x0a20,R14             
+        MOV.W   #2,0(R15)        
+        MOV.W   #2,2(R15)         
+        MOV.W   #2,4(R15)         
+        MOV.W   #2,0(R14)               
+        MOV.W   #2,2(R14)               
+        MOV.W   #2,4(R14)               
+        MOV.W   #6,R13                  ; passe o n (tamanho do vetor para a função), mas 2*n
+         CALL   #Produto_Escalar
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+Produto_Escalar:        CLR R12
+                        CLR R11
+Loop_Rotine:            CMP R12,R13
+                        JL Fim
+                        PUSH R15
+                        PUSH R14
+                        ADD R12,R15
+                        ADD R12,R14
+                        MOV 0(R15),R15
+                        MOV 0(R14),R14
+                        CALL #Mult_Rotine
+                        ADD R15,R11                        
+                        POP R14
+                        POP R15
+                        INCD R12
+                        JMP Loop_Rotine
+Fim:                    MOV R11,R15
+                        RET
+
+Mult_Rotine:            PUSH R13
+                        PUSH R12
+                        CLR.W R13
+                        MOV.W R14,R12
+Mult_loop:              CMP #0,R12
+                        JEQ End_Mult
+                        ADD.W R15,R13
+                        DEC.W R12
+                        JMP Mult_loop
+End_Mult:               MOV.W R13,R15
+                        POP R12
+                        POP R13
+                        RET
+        END

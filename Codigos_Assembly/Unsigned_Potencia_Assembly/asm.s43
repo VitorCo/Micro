@@ -1,0 +1,47 @@
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+
+ 	MOV.W #0,R15
+ 	MOV.W #4,R14
+        CALL #Potencia
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+Potencia:     MOV R14,R11               ;Contador i = R14
+              MOV R15,R14
+              CMP #0,R11
+              JEQ End_Pot_1
+Loop:         CMP #1,R11
+              JEQ End_Pot_2
+              CALL #Mult_Routine
+              DEC R11
+              JMP Loop
+End_Pot_1:    MOV #1,R15
+              RET              
+End_Pot_2:    RET 
+ 
+Mult_Routine: CLR.W R13
+              MOV.W R14,R12
+Mult_loop:    CMP #0,R12
+              JEQ End_Mult
+              ADD.W R15,R13
+              DEC.W R12
+              JMP Mult_loop
+End_Mult:     MOV.W R13,R15
+              RET
+
+        END
