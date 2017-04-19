@@ -1,0 +1,141 @@
+Funções Matemáticas Sem Sinal
+-------------------------------------------------------------------------------
+Potencia:     MOV R14,R11               ;Contador i = R14
+              MOV R15,R14
+              CMP #0,R11
+              JEQ End_Pot_1
+Loop:         CMP #1,R11
+              JEQ End_Pot_2
+              CALL #Mult_Routine
+              DEC R11
+              JMP Loop
+End_Pot_1:    MOV #1,R15
+              RET              
+End_Pot_2:    RET
+-----------------------------------------------------------------------------
+Mult_Routine: CLR.W R13
+              MOV.W R14,R12
+Mult_loop:    CMP #0,R12
+              JEQ End_Mult
+              ADD.W R15,R13
+              DEC.W R12
+              JMP Mult_loop
+End_Mult:     MOV.W R13,R15
+              RET
+------------------------------------------------------------------------------
+Raiz:     MOV R15,R14
+          RRA R14
+          CLR R11                        ; contador
+Loop_Raiz:CMP #11,R11
+          JGE End_Loop
+          PUSH R15
+          CALL #Div_Loop
+          ADD R15,R14
+          RRA R14
+          INC R11
+          POP R15
+          JMP Loop_Raiz
+End_Loop: MOV R14,R15
+          RET
+----------------------------------------------------------------------------------
+Div_Loop:       CLR R13
+Loop_Div        CMP R14,R15
+                JL END_Div
+ 		SUB R14,R15
+ 		INC R13
+ 		JMP Loop_Div             
+END_Div:        MOV R13,R15
+                RET
+--------------------------------------------------------------------------------
+ Resto_Loop:    CMP R14,R15
+                JL  END_Resto
+ 		SUB R14,R15
+ 		JMP Resto_Loop              
+ END_Resto:     RET
+--------------------------------------------------------------------------------
+Produto_Escalar:        CLR R12
+                        CLR R11
+Loop_Rotine:            CMP R12,R13
+                        JL Fim
+                        PUSH R15
+                        PUSH R14
+                        ADD R12,R15
+                        ADD R12,R14
+                        MOV 0(R15),R15
+                        MOV 0(R14),R14
+                        CALL #Mult_Rotine
+                        ADD R15,R11                        
+                        POP R14
+                        POP R15
+                        INCD R12
+                        JMP Loop_Rotine
+Fim:                    MOV R11,R15
+                        RET
+
+Mult_Rotine:            PUSH R13
+                        PUSH R12
+                        CLR.W R13
+                        MOV.W R14,R12
+Mult_loop:              CMP #0,R12
+                        JEQ End_Mult
+                        ADD.W R15,R13
+                        DEC.W R12
+                        JMP Mult_loop
+End_Mult:               MOV.W R13,R15
+                        POP R12
+                        POP R13
+                        RET
+---------------------------------------------------------------------------------
+Com Sinal:
+---------------------------------------------------------------------------------
+Potencia: 	push R4;
+		push R5;
+		clr R4; //sign =0;
+		mov #1,R5 //p=1;
+		cmp #1,R14;
+		jl While_Pot;
+		inv R14;
+		inc R14;
+		mov #1,R4;
+
+While_Pot:	tst R14;
+		jz While_Pot_End;
+		push R15;
+		push R14;
+		call Mult_Signed;
+		mov R15,R5;
+		pop R14;
+		pop R15;
+		dec R14;
+		jmp While_Pot;
+
+While_Pot_End:	cmp #1, R4;
+		jne Pot_End;
+		mov #1,R15;
+		mov R5,R14;
+		call Div_Signed;
+		pop R5;
+		pop R4;
+		ret
+
+Pot_End:	mov R5,R15;
+		pop R5;
+		pop R4
+		ret
+----------------------------------------------------------------------------------
+Fibonacci:	clr 0(R15);
+		mov #1,2(R15);
+		mov #2, R13;
+For_Fibo:	cmp R14,R13;
+		jge For_Fibo_End;
+		mov R13,R12;
+		sub #2,R12;
+		rla R12;     
+		add R15,R12;
+		mov 0(R12),4(R12);  // A[i] = A[i-2]
+		add 2(R12),4(R12)   // A[i]+=A[i-1]
+		inc R13;
+		jmp For_Fibo;
+
+For_Fibo_End:	ret;
+---------------------------------------------------------------------------------
