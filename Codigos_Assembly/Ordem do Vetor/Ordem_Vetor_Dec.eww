@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+    <project>
+        <path>$WS_DIR$\Ordem_Vetor.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\..\Ordem_Vetor_Dec\Ordem_Vetor_Dec.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\..\Produto_Escalar\Produto_Escalar.ewp</path>
+    </project>
+    <batchBuild />
+</workspace>
