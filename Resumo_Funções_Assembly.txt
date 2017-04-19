@@ -148,3 +148,73 @@ For_Fibo:	cmp R14,R13;
 
 For_Fibo_End:	ret;
 ---------------------------------------------------------------------------------
+DIV_signed:
+        
+        PUSH    R15
+        RLA     R15                                             ; c recebe o sinal de a
+        JNC     Third_else_if_DIV_signed                       ; Pule se a>0
+        POP     R15
+        PUSH    R14
+        RLA     R14                                              ; c recebe o sinal de b
+        JNC     Second_else_if_DIV_signed                       ; Pule se b>0
+        POP     R14
+        INV     R15                                              ; realizando o complemento de 2
+        INC     R15                                              ; nas quatro instruções abaixo
+        INV     R14
+        INC     R14
+        CALL    #divisao_unsigned
+        CLR     R14
+        RET                                                      ; return divisao_unsigned(a,b)
+
+Second_else_if_DIV_signed:                                      ; a<0 mas b>0                        
+        POP     R14
+        INV     R15                                              ; realizando o comp.2 para a
+        INC     R15
+        CALL    #divisao_unsigned
+        INV     R15                                              ; realizando o comp. de 2 para
+        INC     R15                                              ; retornar -(divisao_unsigned(a,b))
+        CLR     R14
+        RET
+        
+Third_else_if_DIV_signed:                                       ; a>0 mas b<0 ?
+        POP     R15
+        PUSH    R14
+        RLA     R14                                              ; c recebe o sinal de b
+        JNC     else_DIV_signed                                ; Pule se b>0
+        POP     R14
+        INV     R14                                              ; realizando o complemento de 2
+        INC     R14                                              ; para b
+        CALL    #divisao_unsigned
+        INV     R15                                              ; realizando o comp. de 2 para
+        INC     R15                                              ; retornar -(divisao_unsigned(a,b))
+        CLR     R14
+        RET
+        
+else_DIV_signed:
+        POP     R14
+        CALL    #divisao_unsigned                                ; return divisao_unsigned(a,b)
+        CLR     R14
+        RET
+
+;========================================================================
+;               Calcula a divisão de inteiro da forma R15/R14, sem sinal.
+;========================================================================
+
+divisao_unsigned: 
+        MOV #1,R13
+        CMP R14,R15             ; R15 = dividendo, R14 = divisor
+        JGE divisao_subtract    ; if (R15 >= 14) go to Divisao_subtract
+        CLR.W R15               ; return 0 caso R15 seja menor que R14
+        RET
+        
+divisao_subtract: 
+        SUB.W R14,R15           ; R15 = R15 - R14
+        PUSH.W R13              ; guarde 1 na pilha
+        CALL #divisao_unsigned  ; 303
+        POP.W R14               ; recupere 1 na pilha
+        ADD.W R14,R15           ; return 1 + divisao(dividendo,divisor)
+        CLR.W R14               ; R14 = 0
+        CLR.W R13               ; R13 = 0
+        RET
+        
+        END
