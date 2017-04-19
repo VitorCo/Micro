@@ -271,6 +271,39 @@ O primeiro endereço do vetor 'a' deverá ser passado através do registrador R1
 através do registrador R14, e o tamanho do vetor deverá ser passado pelo registrador R13. A saída deverá ser fornecida no registrador 
 R15.
 
+Produto_Escalar:        CLR R12
+                        CLR R11
+Loop_Rotine:            CMP R12,R13
+                        JL Fim
+                        PUSH R15
+                        PUSH R14
+                        ADD R12,R15
+                        ADD R12,R14
+                        MOV 0(R15),R15
+                        MOV 0(R14),R14
+                        CALL #Mult_Rotine
+                        ADD R15,R11                        
+                        POP R14
+                        POP R15
+                        INCD R12
+                        JMP Loop_Rotine
+Fim:                    MOV R11,R15
+                        RET
+
+Mult_Rotine:            PUSH R13
+                        PUSH R12
+                        CLR.W R13
+                        MOV.W R14,R12
+Mult_loop:              CMP #0,R12
+                        JEQ End_Mult
+                        ADD.W R15,R13
+                        DEC.W R12
+                        JMP Mult_loop
+End_Mult:               MOV.W R13,R15
+                        POP R12
+                        POP R13
+                        RET
+
 10. (a) Escreva uma função em C que indica se um vetor é palíndromo. Por exemplo:
 	[1 2 3 2 1] e [0 10 20 20 10 0] são palíndromos.
 	[5 4 3 2 1] e [1 2 3 2] não são.
