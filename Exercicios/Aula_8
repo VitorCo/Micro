@@ -1,0 +1,71 @@
+Data: 26/04/2017
+
+Para todas as questões, utilize os LEDs e/ou os botões da placa Launchpad do MSP430.
+
+1. Escreva um código em C que pisca os LEDs ininterruptamente.
+
+  #include "io430.h"
+
+int main( void )
+{
+  // Stop watchdog timer to prevent time out reset
+  WDTCTL = WDTPW + WDTHOLD;
+  P1OUT = 0;
+  P1DIR = BIT6 + BIT0;
+  
+  int i = 0;
+  
+  while(1){
+    P1OUT ^= 0x41;
+    for(i=0;i<0x6000;i++);    
+  }
+  return 0;
+}
+
+2. Escreva um código em C que pisca os LEDs ininterruptamente. No ciclo que pisca os LEDs, o tempo que os LEDs ficam ligados deve ser
+duas vezes maior do que o tempo que eles ficam desligados.
+  
+  #include "io430.h"
+
+int main( void )
+{
+  // Stop watchdog timer to prevent time out reset
+  WDTCTL = WDTPW + WDTHOLD;
+  P1OUT = 0;
+  P1DIR = BIT6 + BIT0;
+  
+  while(1){
+    P1OUT ^= 0x41;
+    __delay_cycles(500000);
+    P1OUT ^= 0x41;
+    __delay_cycles(250000);
+  }
+  return 0;
+}
+
+3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
+
+#include "io430.h"
+#define BTN BIT3
+#define LED1 BIT0
+#define LED2 BIT6
+int main( void )
+{
+  // Stop watchdog timer to prevent time out reset
+  WDTCTL = WDTPW + WDTHOLD;
+  P1OUT = 0;
+  P1DIR = LED1+LED2;
+  P1REN = BTN;
+  P1OUT |= BTN;
+  
+  while(1){
+    if((P1IN & BTN) == 0)
+    P1OUT ^= 0x41;
+  }
+  return 0;
+}
+
+4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
+
+5. Escreva um código em C que acende os LEDs quando o botão é pressionado. Deixe o MSP430 em modo de baixo consumo, e habilite a interrupção do botão.
+
