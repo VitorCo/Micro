@@ -1,0 +1,73 @@
+Data: 03/05/2017
+
+1. Escreva uma função em C que faz o debounce de botões ligados à porta P1.
+
+#pragma vector = PORT1_VECTOR
+__interrupt void Interrupcao_P1(void)
+{
+    P1OUT ^= LEDS;
+    atraso(100000);
+    P1IFG &= ~BTN;
+}
+
+2. Escreva um código em C que lê 9 botões multiplexados por 6 pinos, e pisca os LEDs da placa Launchpad de acordo com os botões. 
+Por exemplo, se o primeiro botão é pressionado, os LEDs piscam uma vez; se o segundo botão é pressionado, os LEDs piscam duas vezes; 
+e assim por diante. Se mais de um botão é pressionado, os LEDs não piscam.
+
+  #include "io430.h"
+void atraso(volatile unsigned int dealy)
+{
+    while((delay--)>0);
+}
+
+void Pisca (int i){
+    while(i>0){
+    P1OUT ^= BIT0;
+    atraso(100000);
+    i--;
+    }
+}
+
+int main( void )
+{
+  // Stop watchdog timer to prevent time out reset
+  WDTCTL = WDTPW + WDTHOLD;
+  P1OUT = 0x00;
+  P1DIR = 0xFF;
+  P1DIR  &= ~(BIT4+BIT5+BIT6);
+  P1REN |= (BIT4+BIT5+BIT6);
+  P1OUT |= (BIT4+BIT5+BIT6);
+  
+  while(1){
+     P1OUT |= BIT1;
+     if((P1IN&BIT4)==0)
+       pisca(1);
+     if((P1IN&BIT5)==0)
+       pisca(4);
+     if((P1IN&BIT6)==0)
+       pisca(7);
+     
+     P1OUT |= ~(BIT1)+ BIT2;
+     if((P1IN&BIT4)==0)
+       pisca(2);
+     if((P1IN&BIT5)==0)
+       pisca(5);
+     if((P1IN&BIT6)==0)
+       pisca(8);
+     
+     P1OUT |= ~(BIT2)+ BIT3;
+     if((P1IN&BIT4)==0)
+       pisca(3);
+     if((P1IN&BIT5)==0)
+       pisca(6);
+     if((P1IN&BIT6)==0)
+       pisca(9);
+  }
+  return 0;
+}
+
+
+
+
+
+
