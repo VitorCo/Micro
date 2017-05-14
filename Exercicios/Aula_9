@@ -15,6 +15,13 @@ Por exemplo, se o primeiro botão é pressionado, os LEDs piscam uma vez; se o s
 e assim por diante. Se mais de um botão é pressionado, os LEDs não piscam.
 
   #include "io430.h"
+
+#define Linha_1 BIT4
+#define Linha_2 BIT5
+#define Linha_3 BIT6
+#define Coluna_1 BIT1
+#define Coluna_2 BIT2
+#define Coluna_3 BIT3
 void atraso(volatile unsigned int dealy)
 {
     while((delay--)>0);
@@ -39,28 +46,29 @@ int main( void )
   P1OUT |= (BIT4+BIT5+BIT6);
   
   while(1){
-     P1OUT |= BIT1;
-     if((P1IN&BIT4)==0)
+     P1OUT |= Coluna_1 + Coluna_2 + Coluna_3;
+     P1OUT &= ~Coluna_1
+     if((P1IN&Linha_1)==0)
        pisca(1);
-     if((P1IN&BIT5)==0)
+     if((P1IN&Linha_2)==0)
        pisca(4);
-     if((P1IN&BIT6)==0)
+     if((P1IN&Linha_3)==0)
        pisca(7);
      
-     P1OUT |= ~(BIT1)+ BIT2;
-     if((P1IN&BIT4)==0)
+     P1OUT |= Coluna_1 + ~(Coluna_ 2)+ Coluna_3;
+     if((P1IN&Linha_1)==0)
        pisca(2);
-     if((P1IN&BIT5)==0)
+     if((P1IN&Linha_2)==0)
        pisca(5);
-     if((P1IN&BIT6)==0)
+     if((P1IN&Linha_3)==0)
        pisca(8);
      
-     P1OUT |= ~(BIT2)+ BIT3;
-     if((P1IN&BIT4)==0)
+     P1OUT |= Coluna_1 + Coluna_ 2+ ~(Coluna_3);
+     if((P1IN&Linha_1)==0)
        pisca(3);
-     if((P1IN&BIT5)==0)
+     if((P1IN&Linha_2)==0)
        pisca(6);
-     if((P1IN&BIT6)==0)
+     if((P1IN&Linha_3)==0)
        pisca(9);
   }
   return 0;
