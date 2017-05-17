@@ -3,12 +3,115 @@ Data: 12/05/2017
 1. Defina a função void Atraso(volatile unsigned int x); que fornece um atraso de 'x' milissegundos. Utilize o Timer_A para a contagem de 
 tempo, e assuma que o SMCLK já foi configurado para funcionar a 1 MHz. Esta função poderá ser utilizada diretamente nas outras questões 
 desta prova.
+  
+  Atraso(volatile unsigned int x){
+    TA0CTL = ID_0 + TASSEL_2 + MC_1;
+    TA0CCR0 = 1000-1;
+    while(x>0){
+    while((TA0CTL & TAIFG)==0);
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
 
 2. Pisque os LEDs da Launchpad numa frequência de 100 Hz.
 
+#include <msp430g2553.h>
+
+  Atraso(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0);
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+#define LED BIT0
+
+int main(void)
+{
+	WDTCTL = WDTPW + WDTHOLD;	// Stop WDT
+	
+	BCSCTL1 = CALBC1_1MHZ;		//MCLK e SMCLK @ 1MHz
+	DCOCTL = CALDCO_1MHZ;		//MCLK e SMCLK @ 1MHz
+	P1OUT = 0;
+	P1DIR |= LED;
+	TA0CCR0 = 1000-1;
+	TA0CTL = TASSEL_2 + ID_0 + MC_1;
+  
+  while(1){
+  Atraso(10);
+  P1OUT ^= LED;
+  }
+	return 0;
+}
+
 3. Pisque os LEDs da Launchpad numa frequência de 20 Hz.
+  
+  #include <msp430g2553.h>
+
+  Atraso(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0);
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+#define LED BIT0
+
+int main(void)
+{
+	WDTCTL = WDTPW + WDTHOLD;	// Stop WDT
+	
+	BCSCTL1 = CALBC1_1MHZ;		//MCLK e SMCLK @ 1MHz
+	DCOCTL = CALDCO_1MHZ;		//MCLK e SMCLK @ 1MHz
+	P1OUT = 0;
+	P1DIR |= LED;
+	TA0CCR0 = 1000-1;
+	TA0CTL = TASSEL_2 + ID_0 + MC_1;
+  
+  while(1){
+  Atraso(50);
+  P1OUT ^= LED;
+  }
+	return 0;
+}
 
 4. Pisque os LEDs da Launchpad numa frequência de 1 Hz.
+
+  #include <msp430g2553.h>
+
+  Atraso(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0);
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+#define LED BIT0
+
+int main(void)
+{
+	WDTCTL = WDTPW + WDTHOLD;	// Stop WDT
+	
+	BCSCTL1 = CALBC1_1MHZ;		//MCLK e SMCLK @ 1MHz
+	DCOCTL = CALDCO_1MHZ;		//MCLK e SMCLK @ 1MHz
+	P1OUT = 0;
+	P1DIR |= LED;
+	TA0CCR0 = 1000-1;
+	TA0CTL = TASSEL_2 + ID_0 + MC_1;
+  
+  while(1){
+  Atraso(1000);
+  P1OUT ^= LED;
+  }
+	return 0;
+}
 
 5. Pisque os LEDs da Launchpad numa frequência de 0,5 Hz.
 
