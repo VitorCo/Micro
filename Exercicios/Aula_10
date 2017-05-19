@@ -1,16 +1,115 @@
 Data: 05/05/2017
 
-1. Projete o hardware necessário para o MSP430 controlar um motor DC de 12V e 4A. Utilize transistores bipolares de junção (TBJ) com Vbe = 0,7 V, beta = 100 e Vce(saturação) = 0,2 V. Além disso, considere que Vcc = 3 V para o MSP430, e que este não pode fornecer mais do que 10 mA por porta digital.
+1. Projete o hardware necessário para o MSP430 controlar um motor DC de 12V e 4A. Utilize transistores bipolares de junção (TBJ) 
+com Vbe = 0,7 V, beta = 100 e Vce(saturação) = 0,2 V. Além disso, considere que Vcc = 3 V para o MSP430, e que este não pode fornecer 
+mais do que 10 mA por porta digital.
 
-2. Projete o hardware necessário para o MSP430 controlar um motor DC de 10V e 1A. Utilize transistores bipolares de junção (TBJ) com Vbe = 0,7 V e beta = 120. Além disso, considere que Vcc = 3,5 V para o MSP430, e que este não pode fornecer mais do que 10 mA por porta digital.
+2. Projete o hardware necessário para o MSP430 controlar um motor DC de 10V e 1A. Utilize transistores bipolares de junção (TBJ) 
+com Vbe = 0,7 V e beta = 120. Além disso, considere que Vcc = 3,5 V para o MSP430, e que este não pode fornecer mais do que 10 mA 
+por porta digital.
 
-3. Projete o hardware utilizado para controlar 6 LEDs utilizando charlieplexing. Apresente os pinos utilizados no MSP430 e os LEDs, nomeados L1-L6.
+3. Projete o hardware utilizado para controlar 6 LEDs utilizando charlieplexing. Apresente os pinos utilizados no MSP430 e os LEDs, 
+nomeados L1-L6.
 
-4. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
+4. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os 
+LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
 
-5. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
+#define IN_OUT_OUT 0x03 // P1.2 IN/ P1.1 OUT/ P1.0 OUT
+#define OUT_IN_OUT 0x05
+#define OUT_OUT_IN 0x06
+#define GND_GND_VCC 0x01
+#define GND_VCC_GND 0x02
+#define VCC_GND_GND 0x04
 
-6. Defina a função void EscreveDigito(volatile char dig); que escreve um dos dígitos 0x0-0xF em um único display de 7 segmentos via porta P1, baseado na figura abaixo. Considere que em outra parte do código os pinos P1.0-P1.6 já foram configurados para corresponderem aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corrente.
+void main(void){
+WDTCTL = WDTPW + WDTHOLD;   // Stop WDT
+P1OUT = 0;
+
+	while(1){
+P1DIR = IN_OUT_OUT;
+P1OUT = GND_GND_VCC;
+P1OUT = GND_VCC_GND; // Liga Leds 1 e 2;
+
+P1DIR = OUT_OUT_IN;
+P1OUT = VCC_GND_GND;
+P1OUT = GND_VCC_GND; // Liga Leds 3 e 4
+
+P1DIR = OUT_IN_OUT;
+P1OUT = VCC_GND_GND;
+P1OUT = GND_GND_VCC; // Liga Leds 5 e 6
+	}
+}
+5. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de 
+forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
+
+#define IN_OUT_OUT 0x03 // P1.2 IN/ P1.1 OUT/ P1.0 OUT
+#define OUT_IN_OUT 0x05
+#define OUT_OUT_IN 0x06
+#define GND_GND_VCC 0x01
+#define GND_VCC_GND 0x02
+#define VCC_GND_GND 0x04
+
+  Pisca_1_2(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = GND_GND_VCC;
+    P1OUT = GND_VCC_GND;
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+  Pisca_3_4(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = VCC_GND_GND;
+    P1OUT = GND_VCC_GND;
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+  Pisca_5_6(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = VCC_GND_GND;
+    P1OUT = GND_GND_VCC
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+void main (void){
+
+WDTCTL = WDTPW + WDTHOLD;   // Stop WDT
+
+BCSCTL1 = CALBC1_1MHZ;		//MCLK e SMCLK @ 1MHz
+DCOCTL = CALDCO_1MHZ;
+TA0CCR0 = 1000-1;
+TA0CTL = TASSEL_2 + ID_0 + MC_1;
+P1OUT = 0;
+
+while(1){
+	P1DIR = IN_OUT_OUT;
+	Pisca_1_2(1000);
+	
+	P1DIR = OUT_OUT_IN;
+	Pisca_3_4(1000);
+	
+	P1DIR = OUT_IN_OUT;
+	Pisca_4_5(1000);
+	}
+}
+
+6. Defina a função void EscreveDigito(volatile char dig); que escreve um dos dígitos 0x0-0xF em um único display de 7 segmentos via 
+porta P1, baseado na figura abaixo. Considere que em outra parte do código os pinos P1.0-P1.6 já foram configurados para corresponderem 
+aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corrente.
 
         ---  ==> A
        |   |
