@@ -123,3 +123,96 @@ aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corren
 
 7. Multiplexe 2 displays de 7 segmentos para apresentar a seguinte sequência em loop:
 	00 - 11 - 22 - 33 - 44 - 55 - 66 - 77 - 88 - 99 - AA - BB - CC - DD - EE - FF
+
+
+
+-------------------------------------------------------------------------------------
+#include <msp430g2553.h>
+
+#define CHPx1 BIT0
+#define CHPx2 BIT1
+#define CHPx3 BIT2
+#define CHPxS (CHPx1 + CHPx2 + CHPx3)
+#define CHPx_CLR P1OUT &= ~CHPxS
+
+void Charlie_ON (char CHPx_OUT, char CHPx_ON){
+	P1OUT &= ~CHPxS;
+	P1DIR &= ~CHPxS;
+	P1DIR |= CHPx_OUT;
+	P1OUT |= CHPx_ON;
+}
+int main(void){
+
+	WDTCTL = WDTPW|WDTHOLD;
+	
+	while(1){
+
+	Charlie_ON(CHPx1 + CHPx2,CHPx1);
+	Charlie_ON(CHPx1 + CHPx2,CHPx2);
+
+	Charlie_ON(CHPx2 + CHPx3,CHPx2);
+	Charlie_ON(CHPx2 + CHPx3,CHPx3);
+
+	Charlie_ON(CHPx1 + CHPx3,CHPx1);
+	Charlie_ON(CHPx1 + CHPx3,CHPx3); // Metodo mais eficiente
+
+	//P1DIR = CHPx1 + CHPx2;
+	//P1OUT = CHPx1;
+	//P1OUT = CHPx2;
+
+	//P1DIR = CHPx2 + CHPx3;
+	//P1OUT = CHPx2;
+	//P1OUT = CHPx3;
+
+	//P1DIR = CHPx1 + CHPx3;
+	//P1OUT = CHPx1;
+	//P1OUT = CHPx3;		//Forma mais direta
+	}
+}
+
+---------------------------------------------------------------------------------------
+int main(void){
+	
+	char out[]={CHPx1 + CHPx2, CHPx1 + CHPx2, CHPx2 + CHPx3, CHPx2 + CHPx3, CHPx1 + CHPx3,
+		    CHPx1 + CHPx3};
+	
+	char ons[]={CHPx1, CHPx2, CHPx2, CHPx3, CHPx1, CHPx3};	
+
+	char e;
+	WDTCTL = WDTPW|WDTHOLD;
+
+	while(1){
+		
+		for(e=0;e<6;e++)		
+		Charlie_On(outs[e], ons[e])x;
+	}
+   return 0;
+}
+-----------------------------------------------------------------------------------------------------
+int main(void){
+
+unsigned int i;
+WDTCTL = WDTPW|WDTHOLD;
+while(1){
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx1 + CHPx2,CHPx1);
+Charlie_ON(CHPx1 + CHPx2,CHPx2);
+
+}
+
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx2 + CHPx3,CHPx2);
+Charlie_ON(CHPx2 + CHPx3,CHPx3);
+
+}
+
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx1 + CHPx3,CHPx1);
+Charlie_ON(CHPx1 + CHPx3,CHPx3);
+
+}
+}
+}
