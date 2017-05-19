@@ -7,11 +7,13 @@ desta prova.
   Atraso(volatile unsigned int x){
     TA0CTL = ID_0 + TASSEL_2 + MC_1;
     TA0CCR0 = 1000-1;
+    TA0CTL |= TACLR
     while(x>0){
     while((TA0CTL & TAIFG)==0);
     x--;
     TA0CTL &= ~TAIFG;
     }
+   TA0CTL = MC_0;
 }
 
 2. Pisque os LEDs da Launchpad numa frequência de 100 Hz.
@@ -103,13 +105,23 @@ __interrupt void TA0_ISR(void)
     TA0CTL &= ~TAIFG;
 }
 
-3) Igual a anterior, porém com TA0CCR0 = 50000-1;
+3) Igual a anterior, porém com TA0CCR0 = 50000-1; // dividir por 2!!!! 
 4) Igual a anterior, porém com TA0CCR0 = 1000000-1;
 5) Igual a anterior, porém com TA0CCR0 = 2000000-1;
 
 7. Defina a função void paralelo_para_serial(void); que lê o byte de entrada via porta P1 e transmite os bits serialmente via pino P2.0. 
 Comece com um bit em nivel alto, depois os bits na ordem P1.0 - P1.1 - … - P1.7 e termine com um bit em nível baixo. Considere um período 
 de 1 ms entre os bits.
+	
+	P1DIR = 0;
+	P2DIR |= BIT0;
+	
+	void paralelo_para_serial(void){
+	P2OUT |= BIT0;
+	Atraso(1);
+	if(P1IN & BIT0) P2OUT |= BIT0;
+	else P2OUT &= ~BIT0;
+	}
 
 8. Faça o programa completo que lê um byte de entrada serialmente via pino P2.0 e transmite este byte via porta P1. O sinal serial começa
 com um bit em nivel alto, depois os bits na ordem 0-7 e termina com um bit em nível baixo. Os pinos P1.0-P1.7 deverão corresponder aos 
