@@ -7,7 +7,7 @@ desta prova.
   Atraso(volatile unsigned int x){
     TA0CTL = ID_0 + TASSEL_2 + MC_1;
     TA0CCR0 = 1000-1;
-    TA0CTL |= TACLR
+    TA0CTL |= TACLR + MC_1;
     while(x>0){
     while((TA0CTL & TAIFG)==0);
     x--;
